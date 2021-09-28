@@ -1,0 +1,30 @@
+version: '3.3'
+
+services:
+  app:
+    depends_on:
+      - estcmd 
+    build: ./lighttpd
+    volumes:
+      - ./index:/index
+      - ./configuration_files:/configuration
+      - ./lighttpd/startscript:/startscript
+      - ./source:/www/public/source
+    ports: 
+     - 80:80
+    environment:
+     - BASE_URL=http://localhost:80/source/
+    restart: always
+    networks:
+      - default
+  estcmd:
+    build: ./estcmd
+    restart: always
+    volumes:
+      - ./index:/index
+      - ./source:/source
+      - ./estcmd/startscript:/startscript
+      - ./configuration_files:/cron_configuration
+    networks:
+      - default
+  
